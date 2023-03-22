@@ -1,89 +1,81 @@
-// létrehozunk egy konstans tömböt a képekkel
+/* window.addEventListener("load",function (){
+    //ide jön a kód
+})
+$(document).ready(function(){
+   
+  }); */
+//hozz létre egy listát a képekkel
+// kép elég!
 const LIST = [
-    "kepek/kep1.jpg",
-    "kepek/kep2.jpg",
-    "kepek/kep3.jpg",
-    "kepek/kep4.jpg",
-    "kepek/kep5.jpg",
-    "kepek/kep6.jpg",
-    "kepek/kep1.jpg",
-    "kepek/kep2.jpg",
-    "kepek/kep3.jpg",
-    "kepek/kep4.jpg",
-    "kepek/kep5.jpg",
-    "kepek/kep6.jpg",
-  ];
-  
-  // kiválasztott képek tárolására szolgáló tömb
-  const KIVALASZTOTTKEPEK = [];
-  
-  // a kattintások számának számlálója
-  let db = 0;
-  
-  $(function () {
-    // HTML építése
-    const FELSOELEM = $("#felso");
-    const tartalom = osszeAllit();
-    FELSOELEM.append(tartalom);
-  
-    // kisképekre kattintás
-    const FELSOKEPEK = $("#felso img");
-    FELSOKEPEK.on("click", kepreKattintas);
-  });
-  
-  // kisképre kattintás
-  function kepreKattintas() {
-    // megkeressük az aktuális képet
-    const aktKep = event.target;
-  
-    // ha a képre már kattintottunk, nem történik semmi
-    if (aktKep.classList.contains("kivalasztott")) {
-      return;
-    }
-  
-    // eltároljuk a kiválasztott kép id-jét
-    const aktKepId = $(aktKep).attr("id");
-    KIVALASZTOTTKEPEK.push(aktKepId);
-  
-    // ha már két képet kiválasztottunk, akkor visszafordítjuk őket
-    db++;
-    if (db == 2) {
-      disableClicks();
-      db = 0;
-      visszafordit();
-    }
-  
-    // megfordítjuk a kattintott képet
-    $(aktKep).addClass("kivalasztott");
-    aktKep.src = LIST[aktKepId];
+  "kepek/kep1.jpg",
+  "kepek/kep2.jpg",
+  "kepek/kep3.jpg",
+  "kepek/kep4.jpg",
+  "kepek/kep5.jpg",
+  "kepek/kep6.jpg",
+  "kepek/kep1.jpg",
+  "kepek/kep2.jpg",
+  "kepek/kep3.jpg",
+  "kepek/kep4.jpg",
+  "kepek/kep5.jpg",
+  "kepek/kep6.jpg",
+];
+const KIVALASZTOTTKEPEK = [];
+let db = 0;
+$(function () {
+  //ide jön a kód
+  /**1 .tedd ki a képeket a felső sectionbe
+   * minden kép külön div-be kerüljön
+   */
+  const FELSOELEM = $("#felso");
+  let tartalom = osszeAllit();
+  FELSOELEM.append(tartalom);
+
+  /**kisképekre kattintás */
+  //fogd meg a kisképeket
+  const FELSOKEPEK = $("#felso img");
+  //add hozzá az eseménykezelőt ,
+  FELSOKEPEK.on("click", kepreKattintas);
+});
+
+function kepreKattintas() {
+  const aktKep = event.target;
+  //irasd ki a konzolra az aktuális elem src attributumát!
+  console.log(aktKep.id);
+  console.log($(aktKep).attr("id"));
+  /**Írjuk ki, hogy hányadik képre kattintottunK?  */
+  /**kicseréljk a kép src */
+  aktKep.src = LIST[aktKep.id];
+  KIVALASZTOTTKEPEK.push($(aktKep).attr("id"));
+  db++;
+  if (db == 2) {
+    db = 0;
+    visszafordit();
   }
-  // kiválasztott képek visszafordítása
+}
+
 function visszafordit() {
+  //visszaállítjuk az src-t a háttérre, amelyikre kattintottunk
+  console.log(KIVALASZTOTTKEPEK);
+
+  setTimeout(function () {
     const FELSOKEPEK = $("#felso img");
-    const kivalasztottKepek = $(".kivalasztott");
-    const id1 = $(kivalasztottKepek[0]).attr("id");
-    const id2 = $(kivalasztottKepek[1]).attr("id");
-    
-    setTimeout(function () {
-    const kep1 = FELSOKEPEK.eq(id1);
-    kep1.removeClass("kivalasztott");
-    kep1.attr("src", "kepek/hatter.jpg");}, 1000);
-}// kiválasztott képek engedélyezése
-function enableClicks() {
-    const FELSOKEPEK = $("#felso img");
-    FELSOKEPEK.each(function () {
-    const kep = $(this);
-    if (!kep.hasClass("kivalasztott")) {
-    kep.on("click", kepreKattintas);
-    }
-    });
-    }
-    
-    // HTML építése
-    function osszeAllit() {
-    let html = "";
-    for (let i = 0; i < LIST.length; i++) {
-    html += <img id="${i}" src="kepek/hatter.jpg" alt="kép">;
-    }
-    return html;
-    }
+    let aktkep = FELSOKEPEK.eq(KIVALASZTOTTKEPEK[0]);
+    console.log(aktkep);
+    $(aktkep).attr("src", "kepek/hatter.jpg");
+    aktkep = FELSOKEPEK.eq(KIVALASZTOTTKEPEK[1]);
+    $(aktkep).attr("src", "kepek/hatter.jpg");
+    KIVALASZTOTTKEPEK.pop();
+    KIVALASZTOTTKEPEK.pop();
+  }, 1000);
+}
+
+function osszeAllit() {
+  //**összállítjuk a szöveget, ami megjeleníti a képket */
+  let txt = "";
+  for (let index = 0; index < LIST.length; index++) {
+    txt += `<div><img src="kepek/hatter.jpg" alt="" id="${index}"></div>`;
+  }
+  console.log(txt);
+  return txt;
+}
